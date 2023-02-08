@@ -7,6 +7,7 @@ exports.handler = async (event) => {
   headers['x-xss-protection'] = [{key: 'X-XSS-Protection', value: '1; mode=block'}];
   headers['x-frame-options'] = [{key: 'X-Frame-Options', value: 'DENY'}];
   headers['referrer-policy'] = [{key: 'Referrer-Policy', value: 'same-origin'}];
+  headers['x-cache'] = [{key: 'X-Cache', value: 'Hit from CloudFront'}];
 
   return response;
 };
