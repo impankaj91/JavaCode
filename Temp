@@ -1,0 +1,61 @@
+<?php
+session_start();
+
+// Set the session timeout in seconds
+$sessionTimeout = 180; // 3 minutes
+
+// Check if the session is set
+if (isset($_SESSION['last_activity'])) {
+    // Calculate the elapsed time since the last activity
+    $elapsedTime = time() - $_SESSION['last_activity'];
+
+    // Check if the session has expired
+    if ($elapsedTime >= $sessionTimeout) {
+        // Session expired, destroy the session and redirect to login page
+        session_destroy();
+        header("Location: login.php");
+        exit();
+    } else {
+        // Session still active, update the last activity time
+        $_SESSION['last_activity'] = time();
+    }
+} else {
+    // Session not set, redirect to login page
+    header("Location: login.php");
+    exit();
+}
+
+// Check if the button is clicked
+if (isset($_POST['startTimer'])) {
+    // Start the countdown timer
+    $_SESSION['timerStartTime'] = time();
+}
+
+// Check if the timer is running
+if (isset($_SESSION['timerStartTime'])) {
+    $timerStartTime = $_SESSION['timerStartTime'];
+    $remainingTime = $sessionTimeout - (time() - $timerStartTime);
+
+    // Check if the timer has finished
+    if ($remainingTime <= 0) {
+        // Timer finished, display the message
+        echo "Timer finished! Message displayed.";
+        // Clear the timer session variable
+        unset($_SESSION['timerStartTime']);
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timer Example</title>
+</head>
+<body>
+    <h1>Timer Example</h1>
+
+    <form method="post">
+        <button type="submit" name="startTimer">Start Timer</button>
+    </form>
+</body>
+</html>
